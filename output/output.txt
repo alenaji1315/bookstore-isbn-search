@@ -1,0 +1,105 @@
+=========================================================================
+       ONLINE BOOKSTORE ISBN MANAGEMENT SYSTEM: BST vs LINEAR SEARCH     
+=========================================================================
+
+-------------------------------------------------------------------------
+PART A: BST Construction and Traversals
+-------------------------------------------------------------------------
+Input ISBN sequence for insertion:
+  45, 20, 60, 10, 30, 50, 70, 25, 55
+
+BST successfully constructed.
+
+Traversals of the Constructed BST:
+  1. Inorder Traversal   (L, Root, R): 10 20 25 30 45 50 55 60 70 
+     (Note: Inorder yields strictly sorted ISBNs in ascending order)
+
+  2. Preorder Traversal  (Root, L, R): 45 20 10 30 25 60 50 55 70 
+
+  3. Postorder Traversal (L, R, Root): 10 25 30 20 55 50 70 60 45 
+
+Tree Properties:
+  - Total Nodes: 9
+  - Tree Height (edges from root): 3
+  - Maximum Levels: 4
+
+Visual Tree Representation (Rotated 90 degrees counter-clockwise):
+-----------------------------------------------------------------
+
+          [70]
+
+     [60]
+
+               [55]
+
+          [50]
+
+[45]
+
+          [30]
+
+               [25]
+
+     [20]
+
+          [10]
+-----------------------------------------------------------------
+
+-------------------------------------------------------------------------
+PART B: Searching Keys [25, 55, 90]
+-------------------------------------------------------------------------
+Searching for ISBN Key: 25
+  [BST Search]:
+    Path Traversed: 45 -> 20 -> 30 -> 25
+    Result: FOUND | Comparisons: 4
+  [Linear Search]:
+    Array Inspection: Checked indices 0 to 7
+    Result: FOUND | Comparisons: 8
+
+Searching for ISBN Key: 55
+  [BST Search]:
+    Path Traversed: 45 -> 60 -> 50 -> 55
+    Result: FOUND | Comparisons: 4
+  [Linear Search]:
+    Array Inspection: Checked indices 0 to 8
+    Result: FOUND | Comparisons: 9
+
+Searching for ISBN Key: 90
+  [BST Search]:
+    Path Traversed: 45 -> 60 -> 70
+    Result: NOT FOUND | Comparisons: 3
+  [Linear Search]:
+    Array Inspection: Checked indices 0 to 8
+    Result: NOT FOUND | Comparisons: 9
+
+-------------------------------------------------------------------------
+COMPARISON SUMMARY TABLE
+-------------------------------------------------------------------------
++------------+----------------+-------------------+----------------------+
+| Search Key | Search Status  | BST Comparisons   | Linear Comparisons   |
++------------+----------------+-------------------+----------------------+
+| 25         | FOUND          | 4                 | 8                    |
+| 55         | FOUND          | 4                 | 9                    |
+| 90         | NOT FOUND      | 3                 | 9                    |
++------------+----------------+-------------------+----------------------+
+
+-------------------------------------------------------------------------
+PART C: Analytical Observations
+-------------------------------------------------------------------------
+1. Tree Shape & Height Influence:
+   - The constructed BST is balanced with height = 3 (4 levels).
+   - At each step, BST discards approximately half of the remaining keys.
+   - Therefore, BST search requires at most 4 comparisons.
+
+2. Comparison with Linear Search:
+   - For key 25: BST required 4 comparisons vs 8 in Linear Search (50% reduction).
+   - For key 55: BST required 4 comparisons vs 9 in Linear Search (55.5% reduction).
+   - For key 90 (Not Found): BST detected absence in 3 comparisons vs 9 in Linear Search (66.7% reduction).
+
+3. Conclusion:
+   - BST Search is significantly superior to Linear Search for this dataset and
+     for online bookstore catalogs where searches are frequent.
+
+=========================================================================
+Execution Completed Successfully.
+=========================================================================
