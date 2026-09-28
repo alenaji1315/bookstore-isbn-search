@@ -1,5 +1,0 @@
-# Binary output
-bookstore_search
-*.o
-*.out
-.DS_Store
