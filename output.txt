@@ -1,0 +1,17 @@
+ONLINE BOOKSTORE - BST ASSIGNMENT
+=================================
+
+Input ISBNs: 45 20 60 10 30 50 70 25 55 
+
+Inorder Traversal   : 10 20 25 30 45 50 55 60 70 
+Preorder Traversal  : 45 20 10 30 25 60 50 55 70 
+Postorder Traversal : 10 25 30 20 55 50 70 60 45 
+
+Search Results
+---------------------------------------------------------------
+Key	BST Result	BST Comparisons	Linear Comparisons
+---------------------------------------------------------------
+25	Found		4		8
+55	Found		4		9
+90	Not Found		3		9
+---------------------------------------------------------------

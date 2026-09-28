@@ -1,245 +1,655 @@
-# Online Bookstore ISBN Management: BST vs. Linear Search
+# Online Bookstore ISBN Search Using Binary Search Tree
 
-A comprehensive Data Structures and Algorithms assignment implementing and comparing **Binary Search Tree (BST)** and **Linear Search** in C.
+## Data Structures and Algorithms Assignment
+
+### Problem
+
+An online bookstore stores the following ISBN keys:
+
+`45, 20, 60, 10, 30, 50, 70, 25, 55`
+
+The task is to construct a Binary Search Tree (BST), perform tree traversals, compare BST search with linear search, analyse the effect of the tree's shape and height, and determine the time and space complexity.
 
 ---
 
-## 📋 Problem Statement
+# 1. Objectives
 
-An online bookstore stores the following ISBN keys:
-```
+This assignment demonstrates:
+
+1. Construction of a Binary Search Tree using a given insertion order.
+2. Inorder, preorder and postorder traversal.
+3. Searching for values using BST Search.
+4. Searching for the same values using Linear Search.
+5. Recording the number of comparisons for each search.
+6. Studying how BST height and shape affect performance.
+7. Comparing observed performance with theoretical complexity.
+8. Drawing a conclusion based on the execution results.
+
+---
+
+# 2. Input Data
+
+The ISBNs are inserted in exactly this order:
+
+```text
 45, 20, 60, 10, 30, 50, 70, 25, 55
 ```
 
-- **Part A:** Construct a Binary Search Tree (BST) by inserting the ISBNs in the given order. Execute the program and display the resulting tree using **Inorder**, **Preorder**, and **Postorder** traversals.
-- **Part B:** Search for keys `25`, `55`, and `90` using:
-  - BST Search
-  - Linear Search
-  - Record the number of comparisons required for each search.
-- **Part C:** Analyze how the shape and height of the BST influence search performance. Compare the observed number of comparisons with the theoretical complexity of BST Search and Linear Search. Conclude which method would be preferable for the given dataset and why.
+The search keys are:
+
+```text
+25, 55, 90
+```
+
+The C program used for this assignment is available in:
+
+`bst_isbn.c`
+
+The original input is recorded in:
+
+`input.txt`
 
 ---
 
-## 📁 Repository Structure
+# 3. Binary Search Tree Construction
 
+A Binary Search Tree follows this rule:
+
+- Values smaller than a node are placed in its left subtree.
+- Values greater than a node are placed in its right subtree.
+
+Insertion sequence:
+
+### Insert 45
+
+The tree is empty, so 45 becomes the root.
+
+```text
+45
 ```
-.
-├── Makefile                # Build and execution automation script
-├── README.md               # Primary assignment documentation and report
-├── data/
-│   └── input.txt           # Input ISBN keys and search queries
-├── docs/
-│   ├── trace_table.md      # Detailed trace tables for insertions, traversals & search
-│   ├── complexity.md       # Theoretical Time & Space complexity analysis
-│   └── comparison.md       # Performance comparison and engineering justification
-├── output/
-│   └── output.txt          # Terminal output from program execution
-└── src/
-    └── main.c              # Complete C source code implementation
+
+### Insert 20
+
+20 < 45, so 20 is placed to the left.
+
+```text
+   45
+  /
+20
+```
+
+### Insert 60
+
+60 > 45, so 60 is placed to the right.
+
+```text
+   45
+  /  \
+20    60
+```
+
+### Insert 10
+
+10 < 45 and 10 < 20, so it becomes the left child of 20.
+
+### Insert 30
+
+30 < 45 but 30 > 20, so it becomes the right child of 20.
+
+### Insert 50
+
+50 > 45 but 50 < 60, so it becomes the left child of 60.
+
+### Insert 70
+
+70 > 45 and 70 > 60, so it becomes the right child of 60.
+
+### Insert 25
+
+25 < 45, 25 > 20 and 25 < 30, so it becomes the left child of 30.
+
+### Insert 55
+
+55 > 45, 55 < 60 and 55 > 50, so it becomes the right child of 50.
+
+---
+
+# 4. Final BST
+
+```text
+              45
+            /    \
+          20      60
+         /  \    /  \
+       10   30  50   70
+            /     \
+           25      55
+```
+
+The height of the tree is:
+
+- Height in edges = **3**
+- Number of levels = **4**
+
+The longest paths from root to leaves are:
+
+```text
+45 → 20 → 30 → 25
+45 → 60 → 50 → 55
 ```
 
 ---
 
-## ⚙️ Compilation & Execution
+# 5. Tree Traversals
 
-### Prerequisites
-- GCC Compiler supporting C11 (`gcc --version`)
-- Make utility (`make --version`)
+## Inorder Traversal
 
-### Quick Start
-To compile and execute the program, saving output to `output/output.txt`:
+Inorder follows:
+
+`Left → Root → Right`
+
+Result:
+
+```text
+10 20 25 30 45 50 55 60 70
+```
+
+An important property of a BST is that its inorder traversal produces the keys in sorted ascending order.
+
+---
+
+## Preorder Traversal
+
+Preorder follows:
+
+`Root → Left → Right`
+
+Result:
+
+```text
+45 20 10 30 25 60 50 55 70
+```
+
+---
+
+## Postorder Traversal
+
+Postorder follows:
+
+`Left → Right → Root`
+
+Result:
+
+```text
+10 25 30 20 55 50 70 60 45
+```
+
+The complete execution output is available in:
+
+`output.txt`
+
+---
+
+# 6. BST Search
+
+The program searches for:
+
+```text
+25
+55
+90
+```
+
+## Search for 25
+
+Path:
+
+```text
+45 → 20 → 30 → 25
+```
+
+Comparisons:
+
+1. Compare 25 with 45 (`25 < 45` → Go Left).
+2. Compare 25 with 20 (`25 > 20` → Go Right).
+3. Compare 25 with 30 (`25 < 30` → Go Left).
+4. Compare 25 with 25 (`25 == 25` → Found).
+
+Result:
+
+**Found in 4 comparisons.**
+
+---
+
+## Search for 55
+
+Path:
+
+```text
+45 → 60 → 50 → 55
+```
+
+Comparisons:
+
+1. Compare 55 with 45 (`55 > 45` → Go Right).
+2. Compare 55 with 60 (`55 < 60` → Go Left).
+3. Compare 55 with 50 (`55 > 50` → Go Right).
+4. Compare 55 with 55 (`55 == 55` → Found).
+
+Result:
+
+**Found in 4 comparisons.**
+
+---
+
+## Search for 90
+
+Path:
+
+```text
+45 → 60 → 70 → NULL
+```
+
+Comparisons:
+
+1. Compare 90 with 45 (`90 > 45` → Go Right).
+2. Compare 90 with 60 (`90 > 60` → Go Right).
+3. Compare 90 with 70 (`90 > 70` → Go Right).
+
+After 70, the right child is NULL.
+
+Result:
+
+**Not Found in 3 comparisons.**
+
+Detailed traces are available in:
+
+`trace_table.md`
+
+---
+
+# 7. Linear Search
+
+The original array is:
+
+```text
+45 20 60 10 30 50 70 25 55
+```
+
+Linear search examines elements from left to right.
+
+## Search for 25
+
+```text
+45 ✗
+20 ✗
+60 ✗
+10 ✗
+30 ✗
+50 ✗
+70 ✗
+25 ✓
+```
+
+Comparisons = **8**
+
+## Search for 55
+
+```text
+45 ✗
+20 ✗
+60 ✗
+10 ✗
+30 ✗
+50 ✗
+70 ✗
+25 ✗
+55 ✓
+```
+
+Comparisons = **9**
+
+## Search for 90
+
+Every element is checked:
+
+```text
+45 ✗
+20 ✗
+60 ✗
+10 ✗
+30 ✗
+50 ✗
+70 ✗
+25 ✗
+55 ✗
+```
+
+Comparisons = **9**
+
+---
+
+# 8. Search Comparison
+
+| Search Key | BST Result | BST Comparisons | Linear Result | Linear Comparisons |
+|---:|---|---:|---|---:|
+| 25 | Found | 4 | Found | 8 |
+| 55 | Found | 4 | Found | 9 |
+| 90 | Not Found | 3 | Not Found | 9 |
+
+The BST requires fewer comparisons for all three test cases.
+
+---
+
+# 9. Complexity Analysis
+
+## BST Search
+
+For a reasonably balanced BST:
+
+**Average case:**
+
+`O(log n)`
+
+**Worst case:**
+
+`O(n)`
+
+The worst case occurs when the tree becomes skewed.
+
+The auxiliary space associated with tree traversal/search is related to the height:
+
+`O(h)`
+
+where `h` is the tree height.
+
+---
+
+## Linear Search
+
+**Best case:**
+
+`O(1)`
+
+**Average case:**
+
+`O(n)`
+
+**Worst case:**
+
+`O(n)`
+
+Extra space:
+
+`O(1)`
+
+---
+
+## BST Insertion
+
+Average case for a reasonably balanced tree:
+
+`O(log n)`
+
+Worst case:
+
+`O(n)`
+
+---
+
+## Tree Traversals
+
+Inorder, preorder and postorder visit every node once.
+
+Time complexity:
+
+`O(n)`
+
+Recursive auxiliary space:
+
+`O(h)`
+
+---
+
+# 10. Effect of BST Shape and Height
+
+The performance of an ordinary BST depends heavily on its shape.
+
+The constructed tree is reasonably balanced:
+
+```text
+              45
+            /    \
+          20      60
+         /  \    /  \
+       10   30  50   70
+            /     \
+           25      55
+```
+
+Its height is only 3 edges (4 levels).
+
+This means a search can reach a required value using a small number of comparisons.
+
+For example:
+
+```text
+BST Search for 55:
+
+45 → 60 → 50 → 55
+```
+
+Only four comparisons are required.
+
+---
+
+# 11. What Happens if the BST Becomes Skewed?
+
+Consider inserting already sorted values:
+
+```text
+10, 20, 30, 40, 50
+```
+
+The resulting tree can look like:
+
+```text
+10
+  \
+   20
+     \
+      30
+        \
+         40
+           \
+            50
+```
+
+This tree has a large height.
+
+In such a case, BST search can degrade to:
+
+`O(n)`
+
+Therefore, an ordinary BST does not guarantee logarithmic search time unless its height is kept small.
+
+---
+
+# 12. Observed vs Theoretical Performance
+
+For this assignment:
+
+```text
+Number of nodes = 9
+BST height = 3 edges
+```
+
+Observed comparisons:
+
+| Key | BST | Linear |
+|---:|---:|---:|
+| 25 | 4 | 8 |
+| 55 | 4 | 9 |
+| 90 | 3 | 9 |
+
+The observations agree with the expected behaviour:
+
+- BST search uses the tree structure to eliminate unnecessary nodes.
+- Linear search examines elements sequentially.
+- The relatively small BST height results in short search paths.
+- Linear search requires more comparisons for the tested values.
+
+---
+
+# 13. Comparison Table
+
+| Feature | BST Search | Linear Search |
+|---|---|---|
+| Basic method | Tree-based search | Sequential search |
+| Average time | O(log n), if reasonably balanced | O(n) |
+| Worst-case time | O(n) | O(n) |
+| Extra search space | O(h) | O(1) |
+| Data organization | BST property | No special organization |
+| Search 25 | 4 comparisons | 8 comparisons |
+| Search 55 | 4 comparisons | 9 comparisons |
+| Search 90 | 3 comparisons | 9 comparisons |
+
+A detailed version is available in:
+
+`comparison_table.md`
+
+---
+
+# 14. Advantages of BST for This Dataset
+
+The BST provides:
+
+1. Fewer comparisons for all three tested searches.
+2. A structured way of storing ISBN keys.
+3. Efficient searching when the tree height remains small.
+4. Inorder traversal that automatically produces sorted ISBNs.
+5. A structure that can support dynamic insertion of new ISBNs.
+
+---
+
+# 15. Limitations
+
+An ordinary BST can become inefficient if its shape becomes highly unbalanced.
+
+For example, a skewed BST can have:
+
+`O(n)`
+
+search time.
+
+For applications with very large datasets where guaranteed logarithmic performance is important, self-balancing trees such as AVL trees or Red-Black trees can be considered.
+
+---
+
+# 16. Final Conclusion
+
+The ISBN keys were successfully stored in a Binary Search Tree using the given insertion order.
+
+The resulting traversals are:
+
+### Inorder
+
+```text
+10 20 25 30 45 50 55 60 70
+```
+
+### Preorder
+
+```text
+45 20 10 30 25 60 50 55 70
+```
+
+### Postorder
+
+```text
+10 25 30 20 55 50 70 60 45
+```
+
+The search comparison results are:
+
+| Key | BST | Linear |
+|---:|---:|---:|
+| 25 | 4 | 8 |
+| 55 | 4 | 9 |
+| 90 | 3 | 9 |
+
+For the given dataset, BST search required fewer comparisons for every tested key. This is because the BST has a relatively small height and allows the search space to be reduced at every comparison.
+
+The theoretical complexity of BST search is **O(log n)** for a reasonably balanced tree and **O(n)** in the worst case. Linear search has **O(n)** average and worst-case time complexity.
+
+Therefore, for this particular dataset, the constructed BST provides better observed search performance than linear search. The advantage depends on maintaining a suitable tree shape and does not apply to every possible BST arrangement.
+
+---
+
+# 17. Files in This Repository
+
+```text
+bookstore-isbn-search/
+│
+├── README.md
+├── bst_isbn.c
+├── input.txt
+├── output.txt
+├── trace_table.md
+├── complexity_analysis.md
+└── comparison_table.md
+```
+
+## File Description
+
+| File | Purpose |
+|---|---|
+| `README.md` | Complete assignment documentation |
+| `bst_isbn.c` | C source code |
+| `input.txt` | Given ISBNs and search keys |
+| `output.txt` | Program execution output |
+| `trace_table.md` | BST construction and search traces |
+| `complexity_analysis.md` | Time and space complexity |
+| `comparison_table.md` | BST vs Linear Search comparison |
+
+---
+
+# 18. How to Compile and Run
+
+Using GCC:
+
 ```bash
-make run
+gcc bst_isbn.c -o bst_isbn
 ```
 
-### Manual Compilation
+Run:
+
 ```bash
-# Compile
-gcc -Wall -Wextra -std=c11 -O2 src/main.c -o bookstore_search
+./bst_isbn
+```
 
-# Run
-./bookstore_search
+On Windows:
 
-# Clean
-rm -f bookstore_search
+```bash
+gcc bst_isbn.c -o bst_isbn.exe
+bst_isbn.exe
 ```
 
 ---
 
-## 🖥️ Execution Output
+# 19. GitHub Submission
 
-```
-=========================================================================
-       ONLINE BOOKSTORE ISBN MANAGEMENT SYSTEM: BST vs LINEAR SEARCH     
-=========================================================================
+Repository URL:
 
--------------------------------------------------------------------------
-PART A: BST Construction and Traversals
--------------------------------------------------------------------------
-Input ISBN sequence for insertion:
-  45, 20, 60, 10, 30, 50, 70, 25, 55
+`https://github.com/alenaji1315/bookstore-isbn-search`
 
-BST successfully constructed.
+The repository contains:
 
-Traversals of the Constructed BST:
-  1. Inorder Traversal   (L, Root, R): 10 20 25 30 45 50 55 60 70 
-     (Note: Inorder yields strictly sorted ISBNs in ascending order)
-
-  2. Preorder Traversal  (Root, L, R): 45 20 10 30 25 60 50 55 70 
-
-  3. Postorder Traversal (L, R, Root): 10 25 30 20 55 50 70 60 45 
-
-Tree Properties:
-  - Total Nodes: 9
-  - Tree Height (edges from root): 3
-  - Maximum Levels: 4
-
-Visual Tree Representation (Rotated 90 degrees counter-clockwise):
------------------------------------------------------------------
-
-          [70]
-
-     [60]
-
-               [55]
-
-          [50]
-
-[45]
-
-          [30]
-
-               [25]
-
-     [20]
-
-          [10]
------------------------------------------------------------------
-
--------------------------------------------------------------------------
-PART B: Searching Keys [25, 55, 90]
--------------------------------------------------------------------------
-Searching for ISBN Key: 25
-  [BST Search]:
-    Path Traversed: 45 -> 20 -> 30 -> 25
-    Result: FOUND | Comparisons: 4
-  [Linear Search]:
-    Array Inspection: Checked indices 0 to 7
-    Result: FOUND | Comparisons: 8
-
-Searching for ISBN Key: 55
-  [BST Search]:
-    Path Traversed: 45 -> 60 -> 50 -> 55
-    Result: FOUND | Comparisons: 4
-  [Linear Search]:
-    Array Inspection: Checked indices 0 to 8
-    Result: FOUND | Comparisons: 9
-
-Searching for ISBN Key: 90
-  [BST Search]:
-    Path Traversed: 45 -> 60 -> 70
-    Result: NOT FOUND | Comparisons: 3
-  [Linear Search]:
-    Array Inspection: Checked indices 0 to 8
-    Result: NOT FOUND | Comparisons: 9
-
--------------------------------------------------------------------------
-COMPARISON SUMMARY TABLE
--------------------------------------------------------------------------
-+------------+----------------+-------------------+----------------------+
-| Search Key | Search Status  | BST Comparisons   | Linear Comparisons   |
-+------------+----------------+-------------------+----------------------+
-| 25         | FOUND          | 4                 | 8                    |
-| 55         | FOUND          | 4                 | 9                    |
-| 90         | NOT FOUND      | 3                 | 9                    |
-+------------+----------------+-------------------+----------------------+
-```
-
----
-
-## 🌳 Binary Search Tree Architecture
-
-```
-                  [45]  (Level 0 / Root)
-                /      \
-            [20]        [60]  (Level 1)
-           /    \      /    \
-        [10]    [30] [50]   [70]  (Level 2)
-                /      \
-             [25]      [55]  (Level 3)
-```
-
-- **Height ($h$):** 3 edges
-- **Levels:** 4
-- **Root Element:** 45
-
----
-
-## 📊 Comparison Table: Observed vs. Theoretical
-
-| Search Key | Status | BST Comparisons (Observed) | Linear Comparisons (Observed) | Comparison Reduction | Theoretical BST Complexity | Theoretical Linear Complexity |
-| :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **25** | FOUND | **4** | **8** | **50.0%** | $O(h) \approx O(\log N)$ | $O(N)$ (index 7) |
-| **55** | FOUND | **4** | **9** | **55.6%** | $O(h) \approx O(\log N)$ | $O(N)$ (index 8) |
-| **90** | NOT FOUND | **3** | **9** | **66.7%** | $O(h) \approx O(\log N)$ | $O(N)$ (scanned all) |
-
----
-
-## 📈 Complexity Analysis Summary
-
-| Algorithm / Operation | Best Case Time | Average Case Time | Worst Case Time | Auxiliary Space Complexity |
-| :--- | :---: | :---: | :---: | :---: |
-| **BST Search** | $O(1)$ | $O(\log N)$ | $O(N)$ (Skewed tree) | $O(1)$ (iterative) / $O(h)$ (recursive) |
-| **Linear Search** | $O(1)$ | $O(N)$ | $O(N)$ | $O(1)$ |
-| **BST Insertion** | $O(1)$ | $O(\log N)$ | $O(N)$ | $O(h)$ |
-| **BST Traversals** | $O(N)$ | $O(N)$ | $O(N)$ | $O(h)$ |
-
-For formal proofs and detailed derivations, refer to [docs/complexity.md](docs/complexity.md).
-
----
-
-## 🔍 Influence of Tree Shape and Height on Performance
-
-1. **Height as the Performance Upper Bound:**
-   - In a BST, the maximum comparisons required to locate or reject any key is $h + 1$.
-   - For balanced trees, $h = \lfloor \log_2 N \rfloor \implies O(\log N)$.
-   - For degenerate/skewed trees (when data is entered pre-sorted), $h = N - 1 \implies O(N)$, eroding all benefits over linear search.
-2. **Behavior on this Dataset:**
-   - Because the root `45` acts as a near-median divider, the resulting tree is nearly complete and balanced ($h = 3$).
-   - No search ever exceeds 4 comparisons, whereas linear search requires up to 9 comparisons.
-
----
-
-## 💡 Final Conclusion & Engineering Justification
-
-**Recommendation:** **Binary Search Tree (BST) is the preferable data structure.**
-
-### Rationale:
-1. **Search Speed:** Reduces comparison operations by **50% to 66.7%** even on this small dataset of 9 items. For real-world catalogs ($N = 100,000$), BST requires $\approx 17$ comparisons vs. $50,000$ on average for linear search.
-2. **Rapid Rejection of Missing Items:** Missing queries (such as ISBN `90`) are rejected in just 3 comparisons instead of having to inspect every catalog entry.
-3. **Sorted Catalog Retrieval:** Inorder traversal produces ascending ISBN ordering in $O(N)$ time without sorting overhead.
-4. **Dynamic Maintenance:** Enables insertion and deletion of book titles in $O(\log N)$ time, avoiding array shift operations ($O(N)$).
-
----
-
-## 🚀 How to Upload to GitHub
-
-To submit this project to GitHub:
-
-1. **Initialize Git repository:**
-   ```bash
-   cd bookstore-isbn-search
-   git init
-   git add .
-   git commit -m "Complete Bookstore ISBN BST vs Linear Search assignment"
-   ```
-
-2. **Link to your GitHub remote and push:**
-   ```bash
-   # Create a repository on GitHub (e.g. bookstore-isbn-search), then:
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/bookstore-isbn-search.git
-   git push -u origin main
-   ```
-
-3. **Submit:** Copy the GitHub repository URL and submit it as requested.
+- Source code (`bst_isbn.c`)
+- Input data (`input.txt`)
+- Program output (`output.txt`)
+- Trace table (`trace_table.md`)
+- Complexity analysis (`complexity_analysis.md`)
+- Comparison table (`comparison_table.md`)
+- Detailed README (`README.md`)
+- Final conclusion
